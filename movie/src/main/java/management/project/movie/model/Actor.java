@@ -25,6 +25,8 @@ public class Actor {
 
     private String role;
 
+    private String roleCharacterName;
+
     @OneToMany(mappedBy = "actor")
     @JsonIgnore
     private List<MovieCasting> movieCastings;

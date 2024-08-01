@@ -22,6 +22,7 @@ public class MovieCasting {
     private Actor actor;
 
     @Column(name = "role")
+    @JsonIgnore
     private String role;
 
     // Getters and Setters

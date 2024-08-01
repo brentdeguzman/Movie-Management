@@ -21,6 +21,7 @@ public class MovieRequest {
     private Director director;
     private List<Actor> actors;
     private List<Genre> genres;
+    private String roleCharacterName;
 
     // Getters and Setters
 }
