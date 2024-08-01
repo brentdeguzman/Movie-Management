@@ -1,13 +1,7 @@
 package management.project.movie.controller;
 
-import management.project.movie.model.Actor;
-import management.project.movie.model.Director;
-import management.project.movie.model.Genre;
-import management.project.movie.model.Movie;
-import management.project.movie.repository.ActorRepository;
-import management.project.movie.repository.DirectorRepository;
-import management.project.movie.repository.GenreRepository;
-import management.project.movie.repository.MovieRepository;
+import management.project.movie.model.*;
+import management.project.movie.repository.*;
 import management.project.movie.service.MovieRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +28,9 @@ public class MovieController {
 
     @Autowired
     private GenreRepository genreRepository;
+
+    @Autowired
+    private MovieCastingRepository movieCastingRepository;
 
     @GetMapping
     public List<Movie> getAllMovies() {
@@ -67,7 +64,26 @@ public class MovieController {
             savedActors.add(savedActor);
         }
 
-        // Handle genres
+        // Create and save the movie
+        Movie movie = new Movie();
+        movie.setName(movieRequest.getName());
+        movie.setReleaseYear(movieRequest.getReleaseYear());
+        movie.setDirector(savedDirector);
+
+        Movie savedMovie = movieRepository.save(movie);
+        List <MovieCasting> movieCastings = new ArrayList<>();
+        // Save movie castings
+        for (Actor actor : savedActors) {
+            MovieCasting movieCasting = new MovieCasting();
+            movieCasting.setMovie(savedMovie);
+            movieCasting.setActor(actor);
+            movieCasting.setRole(actor.getRole());
+            movieCastingRepository.save(movieCasting);
+            movieCastings.add(movieCasting);
+        }
+        savedMovie.setMovieCastings(movieCastings);
+        movieRepository.save(savedMovie);
+        // Save genres
         List<Genre> genres = movieRequest.getGenres();
         List<Genre> savedGenres = new ArrayList<>();
         for (Genre genre : genres) {
@@ -76,18 +92,11 @@ public class MovieController {
             savedGenres.add(savedGenre);
         }
 
-        // Create and save the movie
-        Movie movie = new Movie();
-        movie.setName(movieRequest.getName());
-        movie.setReleaseYear(movieRequest.getReleaseYear());
-        movie.setDirector(savedDirector);
-        movie.setActors(savedActors);
-        movie.setGenres(savedGenres);
-
-        Movie savedMovie = movieRepository.save(movie);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedMovie);
+        // Set genres for movie (if you have a method for this)
+        savedMovie.setGenres(savedGenres);
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieRepository.save(savedMovie));
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Movie> updateMovie(@PathVariable("id") Long id, @RequestBody Movie movie) {

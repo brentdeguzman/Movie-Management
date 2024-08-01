@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories("management.project.movie.repository")
-@EntityScan("management.project.movie.model")
+@EntityScan(basePackages = "management.project.movie.model")
 public class MovieApplication {
 
 	public static void main(String[] args) {
