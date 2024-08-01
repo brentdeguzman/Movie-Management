@@ -1,8 +1,10 @@
 package management.project.movie.embeddable;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Embeddable
 public class MovieCastingId implements Serializable {
     private Long movie;
     private Long actor;

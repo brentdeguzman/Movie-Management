@@ -1,8 +1,10 @@
 package management.project.movie.repository;
 
-import management.project.movie.embeddable.MovieCastingId;
-import management.project.movie.model.MovieCasting;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import management.project.movie.model.MovieCasting;
 
-public interface MovieCastingRepository extends JpaRepository<MovieCasting, MovieCastingId> {
+@Repository
+public interface MovieCastingRepository extends JpaRepository<MovieCasting, Long> {
 }
+

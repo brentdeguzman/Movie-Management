@@ -1,9 +1,6 @@
 package management.project.movie.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import management.project.movie.embeddable.MovieCastingId;
 
 import javax.persistence.*;
