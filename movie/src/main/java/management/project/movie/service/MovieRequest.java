@@ -7,6 +7,7 @@ import lombok.Setter;
 import management.project.movie.model.Actor;
 import management.project.movie.model.Director;
 import management.project.movie.model.Genre;
+import management.project.movie.model.Movie;
 
 import java.util.List;
 
@@ -22,6 +23,10 @@ public class MovieRequest {
     private List<Actor> actors;
     private List<Genre> genres;
     private String roleCharacterName;
+
+    public MovieRequest(Movie movie) {
+
+    }
 
     // Getters and Setters
 }
