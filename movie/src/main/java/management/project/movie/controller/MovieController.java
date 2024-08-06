@@ -1,7 +1,8 @@
 package management.project.movie.controller;
 
 import management.project.movie.model.Movie;
-import management.project.movie.service.MovieRequest;
+import management.project.movie.model.response.MovieActors;
+import management.project.movie.model.response.MovieRequest;
 import management.project.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,11 @@ public class MovieController {
     @GetMapping
     public List<Movie> getAllMovies() {
         return movieService.getAllMovies();
+    }
+
+    @GetMapping("/{movieId}/actors")
+    public MovieActors getMovieActors(@PathVariable("movieId") Long movieId) {
+        return movieService.getActorsByMovie(movieId);
     }
 
     @GetMapping("/{id}")

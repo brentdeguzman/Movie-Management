@@ -31,5 +31,5 @@ public class Actor {
     @JsonIgnore
     private List<MovieCasting> movieCastings;
 
-
+//helper repo method : from movie, list all cast actors, bypass movie casting
 }

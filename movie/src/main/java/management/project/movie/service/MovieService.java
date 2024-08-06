@@ -1,14 +1,16 @@
 package management.project.movie.service;
 
 import management.project.movie.model.*;
+import management.project.movie.model.response.ActorResponse;
+import management.project.movie.model.response.MovieActors;
+import management.project.movie.model.response.MovieRequest;
 import management.project.movie.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -57,7 +59,7 @@ public class MovieService {
         movie.setDirector(savedDirector);
 
         Movie savedMovie = movieRepository.save(movie);
-        List<MovieCasting> movieCastings = new ArrayList<>();
+        Set<MovieCasting> movieCastings = new HashSet<>();
         for (Actor actor : savedActors) {
             MovieCasting movieCasting = new MovieCasting();
             movieCasting.setMovie(savedMovie);
@@ -79,6 +81,15 @@ public class MovieService {
 
         savedMovie.setGenres(savedGenres);
         return movieRepository.save(savedMovie);
+    }
+
+    public MovieActors getActorsByMovie(Long movieId) {
+        Movie movie =  movieRepository.findById(movieId).get();
+        List<Actor> movieActors = movie.getMovieCastings().stream().map(MovieCasting::getActor).collect(Collectors.toList());
+        MovieActors movieActorsResponse = new MovieActors();
+        movieActorsResponse.setActors(movieActors.stream().map(actor -> new ActorResponse(actor.getName())).collect(Collectors.toList()));
+        movieActorsResponse.setMovieName(movie.getName());
+        return movieActorsResponse;
     }
 
     public boolean existsById(Long id) {

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ public class Movie {
 
     private int releaseYear;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "director_id")
     private Director director;
 
@@ -40,6 +41,6 @@ public class Movie {
     private List<Genre> genres;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MovieCasting> movieCastings;
+    private Set<MovieCasting> movieCastings;
 
 }
