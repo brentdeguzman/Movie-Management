@@ -1,4 +1,4 @@
-package management.project.movie.model.response;
+package management.project.movie.dto;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package management.project.movie.controller;
 
 import management.project.movie.model.Actor;
-import management.project.movie.model.response.ActorMovieList;
+import management.project.movie.dto.ActorMovieList;
 import management.project.movie.service.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

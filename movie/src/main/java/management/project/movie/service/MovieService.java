@@ -1,9 +1,9 @@
 package management.project.movie.service;
 
 import management.project.movie.model.*;
-import management.project.movie.model.response.ActorResponse;
-import management.project.movie.model.response.MovieActors;
-import management.project.movie.model.response.MovieRequest;
+import management.project.movie.dto.ActorResponse;
+import management.project.movie.dto.MovieActors;
+import management.project.movie.dto.MovieRequest;
 import management.project.movie.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 package management.project.movie.controller;
 
 import management.project.movie.model.Movie;
-import management.project.movie.model.response.MovieActors;
-import management.project.movie.model.response.MovieRequest;
+import management.project.movie.dto.MovieActors;
+import management.project.movie.dto.MovieRequest;
 import management.project.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
