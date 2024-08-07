@@ -1,5 +1,6 @@
 # Ignore the target directory
 /target/
+/target/**
 
 # Ignore IDE-specific files
 .idea/

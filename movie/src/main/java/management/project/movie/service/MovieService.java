@@ -99,4 +99,10 @@ public class MovieService {
     public void deleteMovie(Long id) {
         movieRepository.deleteById(id);
     }
+
+    public Movie save(Movie movie) {
+        return movieRepository.save(movie);
+    }
+
+
 }

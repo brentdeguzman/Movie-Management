@@ -1,5 +1,6 @@
 package management.project.movie.controller;
 
+import management.project.movie.dto.MovieUpdate;
 import management.project.movie.model.Movie;
 import management.project.movie.dto.MovieActors;
 import management.project.movie.dto.MovieRequest;
@@ -46,14 +47,22 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable("id") Long id, @RequestBody Movie movie) {
-        if (!movieService.existsById(id)) {
+    public ResponseEntity<Movie> updateMovie(@PathVariable("id") Long id, @RequestBody MovieUpdate movieUpdate) {
+        Optional<Movie> movieOptional = movieService.getMovieById(id);
+
+        if (!movieOptional.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        movie.setId(id);
-        Movie updatedMovie = movieService.createMovie(new MovieRequest(movie));
+
+        Movie movie = movieOptional.get();
+        movie.setName(movieUpdate.getName());
+        movie.setReleaseYear(movieUpdate.getReleaseYear());
+
+        Movie updatedMovie = movieService.save(movie);
         return ResponseEntity.ok(updatedMovie);
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMovie(@PathVariable("id") Long id) {
