@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import management.project.movie.model.Actor;
-import management.project.movie.model.Director;
-import management.project.movie.model.Genre;
-import management.project.movie.model.Movie;
+import management.project.movie.model.*;
 
 import java.util.List;
 
@@ -22,9 +19,8 @@ public class MovieRequest {
     private Director director;
     private List<Actor> actors;
     private List<Genre> genres;
-    private String roleCharacterName;
+    private Rating rating;
 
     public MovieRequest(Movie movie) {
-
     }
 }

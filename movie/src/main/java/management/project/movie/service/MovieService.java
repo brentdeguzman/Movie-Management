@@ -30,6 +30,9 @@ public class MovieService {
     @Autowired
     private MovieCastingRepository movieCastingRepository;
 
+    @Autowired
+    private RatingRepository ratingRepository;
+
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
@@ -77,6 +80,12 @@ public class MovieService {
             Genre savedGenre = genreRepository.findByName(genre.getName())
                     .orElseGet(() -> genreRepository.save(genre));
             savedGenres.add(savedGenre);
+        }
+
+        Rating rating = movieRequest.getRating();
+        if (rating != null) {
+            Rating savedRating = ratingRepository.save(rating);
+            savedMovie.setRating(savedRating);
         }
 
         savedMovie.setGenres(savedGenres);

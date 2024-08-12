@@ -4,6 +4,7 @@ import management.project.movie.dto.MovieUpdate;
 import management.project.movie.model.Movie;
 import management.project.movie.dto.MovieActors;
 import management.project.movie.dto.MovieRequest;
+import management.project.movie.model.Rating;
 import management.project.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,13 +49,14 @@ public class MovieController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Movie> updateMovie(@PathVariable("id") Long id, @RequestBody MovieUpdate movieUpdate) {
-        Optional<Movie> movieOptional = movieService.getMovieById(id);
 
-        if (!movieOptional.isPresent()) {
+        Optional<Movie> existingMovie = movieService.getMovieById(id);
+
+        if (!existingMovie.isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
-        Movie movie = movieOptional.get();
+        Movie movie = existingMovie.get();
         movie.setName(movieUpdate.getName());
         movie.setReleaseYear(movieUpdate.getReleaseYear());
 
