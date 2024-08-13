@@ -28,9 +28,6 @@ public class Movie {
     @JoinColumn(name = "director_id")
     private Director director;
 
-    public void setActors(List<Actor> savedActors) {
-    }
-
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "movie_genre",
@@ -42,8 +39,10 @@ public class Movie {
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MovieCasting> movieCastings;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "rating_id")
     private Rating rating;
 
+    public void setActors(List<Actor> savedActors) {
+    }
 }

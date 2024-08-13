@@ -1,16 +1,25 @@
 package management.project.movie.controller;
 
-import management.project.movie.dto.MovieUpdate;
-import management.project.movie.model.Movie;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import management.project.movie.dto.MovieActors;
 import management.project.movie.dto.MovieRequest;
-import management.project.movie.model.Rating;
+import management.project.movie.dto.MovieUpdate;
+import management.project.movie.model.*;
+import management.project.movie.service.CSVService;
 import management.project.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +29,9 @@ public class MovieController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private CSVService csvService;
 
     @GetMapping
     public List<Movie> getAllMovies() {
@@ -65,7 +77,6 @@ public class MovieController {
     }
 
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMovie(@PathVariable("id") Long id) {
         if (!movieService.existsById(id)) {
@@ -74,4 +85,62 @@ public class MovieController {
         movieService.deleteMovie(id);
         return ResponseEntity.noContent().build();
     }
+
+//    @PostMapping("/upload-csv")
+//    public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
+//        if (file.isEmpty()) {
+//            return ResponseEntity.badRequest().body("File is empty");
+//        }
+//
+//        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
+//            String[] line;
+//            while ((line = reader.readNext()) != null) {
+//                System.out.println(Arrays.toString(line));
+//
+//            }
+//            return ResponseEntity.ok("File uploaded and processed successfully!");
+//        } catch (IOException | CsvValidationException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing CSV file: " + e.getMessage());
+//        }
+//    }
+
+    @PostMapping("/upload-csv")
+    public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("File is empty");
+        }
+
+        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
+            String[] line;
+
+            boolean isHeader = true;
+            while ((line = reader.readNext()) != null) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                // Extract values from CSV
+                String name = line[0];
+                int releaseYear = Integer.parseInt(line[1]);
+                String directorName = line[2];
+                String genresString = line[3];
+                String actorsString = line[4];
+                int score = Integer.parseInt(line[5]);
+                Rating rating = new Rating(score);
+
+                Director director = movieService.findOrCreateDirector(directorName);
+                List<Genre> genres = movieService.findOrCreateGenres(genresString);
+                List<Actor> actors = movieService.findOrCreateActors(actorsString);
+
+                movieService.saveMovies(name, releaseYear, director, genres, actors, rating);
+            }
+            return ResponseEntity.ok("File uploaded and processed successfully!");
+        } catch (IOException | CsvValidationException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing CSV file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid number format in CSV file: " + e.getMessage());
+        }
+    }
 }
+

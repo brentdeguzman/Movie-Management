@@ -21,4 +21,8 @@ public class Rating {
     @Max(100)
     @Column(nullable = false)
     private Integer score;
+
+    public Rating(int score) {
+        this.score = score;
+    }
 }

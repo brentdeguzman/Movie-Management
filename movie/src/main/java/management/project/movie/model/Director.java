@@ -19,4 +19,7 @@ public class Director {
     @Column(length = 50, nullable = false)
     private String name;
 
+    public Director(String directorName) {
+        this.name = directorName;
+    }
 }

@@ -22,4 +22,8 @@ public class Genre {
     @ManyToMany(mappedBy = "genres")
     @JsonIgnore
     private List<Movie> movies;
+
+    public Genre(String name) {
+        this.name = name;
+    }
 }

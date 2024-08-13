@@ -25,7 +25,6 @@ public class MovieCasting {
     @JsonIgnore
     private String role;
 
-    // Getters and Setters
     public Movie getMovie() {
         return movie;
     }
