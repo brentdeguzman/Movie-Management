@@ -6,7 +6,7 @@ import management.project.movie.dto.MovieActors;
 import management.project.movie.dto.MovieRequest;
 import management.project.movie.dto.MovieUpdate;
 import management.project.movie.model.*;
-import management.project.movie.service.CSVService;
+//import management.project.movie.service.CSVService;
 import management.project.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,8 +30,8 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @Autowired
-    private CSVService csvService;
+//    @Autowired
+//    private CSVService csvService;
 
     @GetMapping
     public List<Movie> getAllMovies() {
@@ -86,25 +86,7 @@ public class MovieController {
         return ResponseEntity.noContent().build();
     }
 
-//    @PostMapping("/upload-csv")
-//    public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
-//        if (file.isEmpty()) {
-//            return ResponseEntity.badRequest().body("File is empty");
-//        }
-//
-//        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
-//            String[] line;
-//            while ((line = reader.readNext()) != null) {
-//                System.out.println(Arrays.toString(line));
-//
-//            }
-//            return ResponseEntity.ok("File uploaded and processed successfully!");
-//        } catch (IOException | CsvValidationException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing CSV file: " + e.getMessage());
-//        }
-//    }
-
-    @PostMapping("/upload-csv")
+    @PostMapping("/insert-file")
     public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("File is empty");
@@ -120,7 +102,6 @@ public class MovieController {
                     continue;
                 }
 
-                // Extract values from CSV
                 String name = line[0];
                 int releaseYear = Integer.parseInt(line[1]);
                 String directorName = line[2];
@@ -135,7 +116,7 @@ public class MovieController {
 
                 movieService.saveMovies(name, releaseYear, director, genres, actors, rating);
             }
-            return ResponseEntity.ok("File uploaded and processed successfully!");
+            return ResponseEntity.ok("File processed successfully!");
         } catch (IOException | CsvValidationException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing CSV file: " + e.getMessage());
         } catch (NumberFormatException e) {
