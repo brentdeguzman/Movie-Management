@@ -6,7 +6,6 @@ import management.project.movie.dto.MovieActors;
 import management.project.movie.dto.MovieRequest;
 import management.project.movie.dto.MovieUpdate;
 import management.project.movie.model.*;
-//import management.project.movie.service.CSVService;
 import management.project.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,11 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -29,9 +25,6 @@ public class MovieController {
 
     @Autowired
     private MovieService movieService;
-
-//    @Autowired
-//    private CSVService csvService;
 
     @GetMapping
     public List<Movie> getAllMovies() {
@@ -85,9 +78,9 @@ public class MovieController {
         movieService.deleteMovie(id);
         return ResponseEntity.noContent().build();
     }
-
+    //import - merge insert and upload. export data from the db to create new file
     @PostMapping("/insert-file")
-    public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> insertFile (@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("File is empty");
         }

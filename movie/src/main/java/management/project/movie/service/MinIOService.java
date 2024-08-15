@@ -47,7 +47,7 @@ public class MinIOService {
     }
 
     @SneakyThrows
-    public void downloadFileToLocal(String bucketName, String objectName, String localFilePath) {
+    public void downloadFile(String bucketName, String objectName, String localFilePath) {
         try (InputStream inputStream = minioClient.getObject(
                 GetObjectArgs.builder()
                         .bucket(bucketName)
@@ -55,6 +55,7 @@ public class MinIOService {
                         .build()
         );
              FileOutputStream outputStream = new FileOutputStream(localFilePath)) {
+              //outputStream.write(inputStream.readAllBytes());
 
             byte[] buffer = new byte[1024];
             int bytesRead;

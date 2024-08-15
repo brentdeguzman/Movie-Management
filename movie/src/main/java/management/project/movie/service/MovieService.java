@@ -125,7 +125,6 @@ public class MovieService {
         movie.setActors(actorList);
         movie.setRating(rating);
 
-
         movieRepository.save(movie);
     }
 

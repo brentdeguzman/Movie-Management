@@ -3,6 +3,7 @@ package management.project.movie.controller;
 import management.project.movie.service.MinIOService;
 import management.project.movie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,12 @@ public class FileController {
 
     private final MinIOService minioService;
 
+    @Value("${minio.bucket-name}")
+    private String defaultBucketName;
+
+    @Value("${file.path}")
+    private String directoryPath;
+
     @Autowired
     public MovieService movieService;
 
@@ -24,12 +31,12 @@ public class FileController {
         this.minioService = minioService;
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/minio/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            String bucketName = "movie-management";
+            String bucketName = defaultBucketName;
             String objectName = file.getOriginalFilename();
-            String filePath = "C:\\Users\\brent\\OneDrive\\Desktop\\movies.csv";
+            String filePath = directoryPath;
 
             minioService.uploadFile(bucketName, objectName, filePath);
 
@@ -38,18 +45,20 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file: " + e.getMessage());
         }
     }
-
-    @GetMapping("/download")
+    //export csv from db,
+    @GetMapping("/minio/download")
     public String downloadFileToLocal(
             @RequestParam String bucketName,
             @RequestParam String objectName,
             @RequestParam String localFilePath) {
         try {
-            minioService.downloadFileToLocal(bucketName, objectName, localFilePath);
+            minioService.downloadFile(bucketName, objectName, localFilePath);
             return "File downloaded successfully and stored in: " + localFilePath;
         } catch (Exception e) {
             e.printStackTrace();
             return "Failed to download file: " + e.getMessage();
         }
     }
+
+    //http, rest api
 }
