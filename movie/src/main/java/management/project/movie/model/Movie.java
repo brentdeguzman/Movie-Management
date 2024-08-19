@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -43,6 +44,25 @@ public class Movie {
     @JoinColumn(name = "rating_id")
     private Rating rating;
 
+    @ManyToMany
+    private List<Actor> actors;
+
     public void setActors(List<Actor> savedActors) {
     }
+
+    public String getGenresAsString() {
+        return genres.stream()
+                .map(Genre::getName)
+                .collect(Collectors.joining(", "));
+    }//processes the elements of the stream and combines them into a single result
+
+    public String getActorsAsString(List<Actor> savedActors) {
+        return savedActors.stream()
+                .map(Actor::getName)
+                .collect(Collectors.joining(", "));
+    }
+
+    @OneToOne
+    @JoinColumn(name = "file_reference_id")
+    private FileReference fileReference;
 }

@@ -1,6 +1,8 @@
 package management.project.movie.service;
 
 import io.minio.*;
+import io.minio.errors.MinioException;
+import io.minio.http.Method;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class MinIOService {
@@ -55,7 +58,6 @@ public class MinIOService {
                         .build()
         );
              FileOutputStream outputStream = new FileOutputStream(localFilePath)) {
-              //outputStream.write(inputStream.readAllBytes());
 
             byte[] buffer = new byte[1024];
             int bytesRead;

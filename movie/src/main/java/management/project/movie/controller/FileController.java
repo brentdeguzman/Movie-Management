@@ -31,20 +31,6 @@ public class FileController {
         this.minioService = minioService;
     }
 
-    @PostMapping("/minio/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        try {
-            String bucketName = defaultBucketName;
-            String objectName = file.getOriginalFilename();
-            String filePath = directoryPath;
-
-            minioService.uploadFile(bucketName, objectName, filePath);
-
-            return ResponseEntity.ok("File uploaded successfully in MinIO!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file: " + e.getMessage());
-        }
-    }
     //export csv from db,
     @GetMapping("/minio/download")
     public String downloadFileToLocal(

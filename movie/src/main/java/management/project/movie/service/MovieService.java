@@ -33,6 +33,9 @@ public class MovieService {
     @Autowired
     private RatingRepository ratingRepository;
 
+    @Autowired
+    private FileReferenceRepository fileReferenceRepository;
+
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
@@ -165,6 +168,22 @@ public class MovieService {
     private Actor findOrCreateActor(String actorName) {
         return actorRepository.findByName(actorName)
                 .orElseGet(() -> actorRepository.save(new Actor(actorName)));
+    }
+
+    @Transactional
+    public void saveFileReferenceForMovie(Movie movie, String bucketName, String objectName, String fileUrl) {
+        FileReference fileReference = new FileReference();
+        fileReference.setBucketName(bucketName);
+        fileReference.setObjectName(objectName);
+        fileReference.setFileUrl(fileUrl);
+        fileReference = fileReferenceRepository.save(fileReference);
+
+        movie.setFileReference(fileReference);
+        movieRepository.save(movie);
+    }
+
+    public Movie findMovieByName(String name) {
+        return movieRepository.findByName(name).orElseThrow(() -> new RuntimeException("Movie not found"));
     }
 }
 
